@@ -15,15 +15,25 @@
 </header>
 <main>
 <h1>Products</h1>
+<form id="search" role="search"><label>Search products <input name="q" placeholder="e.g. lamp"></label></form>
+<p id="no-results" hidden>No products match your search.</p>
 <div class="grid" id="products"></div>
 <script>
-  document.getElementById("products").innerHTML = PRODUCTS.map((p) => `
+  function renderProducts(q = "") {
+    const shown = PRODUCTS.filter((p) => p.name.includes(q.trim()));
+    document.getElementById("no-results").hidden = shown.length > 0;
+    document.getElementById("products").innerHTML = shown.map((p) => `
     <article class="card" data-product="${p.id}">
       <h2><a href="/product?id=${p.id}">${p.name}</a></h2>
       <p>${p.blurb}</p>
       <p class="price">${money(p.price)}</p>
       <button onclick="addToCart(${p.id})">Add to cart</button>
     </article>`).join("");
+  }
+  const search = document.getElementById("search");
+  search.oninput = () => renderProducts(search.q.value);
+  search.onsubmit = (e) => { e.preventDefault(); renderProducts(search.q.value); };
+  renderProducts();
 </script>
 </main>
 </body>
