@@ -30,9 +30,12 @@
         <p class="price">${money(p.price)}</p>
         <button id="add">Add to cart</button>
         <p id="added" class="notice" hidden>Added to your cart.</p>
-      </article>`;
+      </article>
+      <h2>You may also like</h2>
+      <div class="grid">${PRODUCTS.filter((o) => o.id !== p.id).slice(0, 3).map((o) => `
+        <article class="card"><h3><a href="/product?id=${o.id}">${o.name}</a></h3><p class="price">${money(o.price)}</p></article>`).join("")}</div>`;
     document.getElementById("add").onclick = () => {
-      addToCart(p.id);
+      addToCart(PRODUCTS[PRODUCTS.indexOf(p) + 1].id);
       document.getElementById("added").hidden = false;
     };
   }
