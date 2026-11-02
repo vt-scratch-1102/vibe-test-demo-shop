@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Product · Vibe Test Demo Shop</title>
+<link rel="stylesheet" href="/style.css">
+<script src="/shop.js"></script>
+</head>
+<body>
+<div class="demo-banner">Demo store for trying Vibe Test — nothing here is for sale and no payment is taken.</div>
+<header>
+  <a class="brand" href="/">Demo Shop</a>
+  <nav><a href="/">Products</a> · <a href="/cart" id="cart-link">Cart (<span id="cart-count">0</span>)</a></nav>
+</header>
+<main>
+<div id="product"></div>
+<script>
+  const p = byId(new URLSearchParams(location.search).get("id"));
+  const el = document.getElementById("product");
+  if (!p) {
+    el.innerHTML = '<h1>Product not found</h1><p><a href="/">Back to products</a></p>';
+  } else {
+    document.title = `${p.name} · Vibe Test Demo Shop`;
+    el.innerHTML = `
+      <p><a href="/">← All products</a></p>
+      <article class="card">
+        <h1>${p.name}</h1>
+        <p>${p.blurb}</p>
+        <p class="price">${money(p.price)}</p>
+        <button id="add">Add to cart</button>
+        <p id="added" class="notice" hidden>Added to your cart.</p>
+      </article>`;
+    document.getElementById("add").onclick = () => {
+      addToCart(p.id);
+      document.getElementById("added").hidden = false;
+    };
+  }
+</script>
+</main>
+</body>
+</html>

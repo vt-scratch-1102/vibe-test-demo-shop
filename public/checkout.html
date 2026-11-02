@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Checkout · Vibe Test Demo Shop</title>
+<link rel="stylesheet" href="/style.css">
+<script src="/shop.js"></script>
+</head>
+<body>
+<div class="demo-banner">Demo store for trying Vibe Test — nothing here is for sale and no payment is taken.</div>
+<header>
+  <a class="brand" href="/">Demo Shop</a>
+  <nav><a href="/">Products</a> · <a href="/cart" id="cart-link">Cart (<span id="cart-count">0</span>)</a></nav>
+</header>
+<main>
+<h1>Checkout</h1>
+<p>Demo only — use made-up details. Nothing is sent anywhere.</p>
+<form id="checkout" novalidate>
+  <label>Full name <input name="name" autocomplete="off"></label>
+  <label>Email <input name="email" type="email" autocomplete="off"></label>
+  <label>Address <input name="address" autocomplete="off"></label>
+  <p id="errors" class="error" role="alert"></p>
+  <button type="submit">Place order</button>
+</form>
+<div id="done" class="notice" hidden></div>
+<script>
+  document.getElementById("checkout").onsubmit = (e) => {
+    e.preventDefault();
+    const f = Object.fromEntries(new FormData(e.target));
+    const errors = [];
+    if (!f.name.trim()) errors.push("Enter your name.");
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(f.email)) errors.push("Enter a valid email.");
+    if (!f.address.trim()) errors.push("Enter your address.");
+    document.getElementById("errors").textContent = errors.join(" ");
+    if (errors.length) return;
+    const total = cartTotal(readCart());
+    writeCart([]);
+    e.target.hidden = true;
+    const done = document.getElementById("done");
+    done.hidden = false;
+    done.textContent = `Thanks ${f.name.trim()}! Your demo order of ${money(total)} is placed (nothing was charged).`;
+  };
+</script>
+</main>
+</body>
+</html>

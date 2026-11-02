@@ -1,0 +1,12 @@
+{
+  "name": "vibe-test-demo-shop",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A tiny demo web shop for trying Vibe Test. No real products, data or payments.",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

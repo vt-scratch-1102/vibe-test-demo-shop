@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cart · Vibe Test Demo Shop</title>
+<link rel="stylesheet" href="/style.css">
+<script src="/shop.js"></script>
+</head>
+<body>
+<div class="demo-banner">Demo store for trying Vibe Test — nothing here is for sale and no payment is taken.</div>
+<header>
+  <a class="brand" href="/">Demo Shop</a>
+  <nav><a href="/">Products</a> · <a href="/cart" id="cart-link">Cart (<span id="cart-count">0</span>)</a></nav>
+</header>
+<main>
+<h1>Your cart</h1>
+<div id="cart"></div>
+<script>
+  function renderCart() {
+    const lines = readCart();
+    const el = document.getElementById("cart");
+    if (lines.length === 0) {
+      el.innerHTML = '<p>Your cart is empty. <a href="/">Browse products</a></p>';
+      return;
+    }
+    el.innerHTML = `
+      <table>
+        <thead><tr><th>Product</th><th>Price</th><th>Qty</th><th>Line total</th><th></th></tr></thead>
+        <tbody>${lines.map((l) => {
+          const p = byId(l.id);
+          return `<tr data-line="${p.id}"><td>${p.name}</td><td>${money(p.price)}</td><td>${l.qty}</td>
+            <td>${money(p.price * l.qty)}</td><td><button class="secondary" onclick="removeLine(${p.id})">Remove</button></td></tr>`;
+        }).join("")}</tbody>
+      </table>
+      <p class="price">Total: <span id="total">${money(cartTotal(lines))}</span></p>
+      <a class="button" href="/checkout">Go to checkout</a>`;
+  }
+  function removeLine(id) {
+    writeCart(readCart().filter((l) => l.id !== id));
+    renderCart();
+  }
+  renderCart();
+</script>
+</main>
+</body>
+</html>
