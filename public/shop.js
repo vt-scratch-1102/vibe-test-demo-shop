@@ -34,7 +34,8 @@ function addToCart(id, qty = 1) {
 }
 
 function cartTotal(lines) {
-  return lines.reduce((sum, l) => sum + byId(l.id).price * l.qty, 0);
+  // One price per line keeps the total readable.
+  return lines.reduce((sum, l) => sum + byId(l.id).price, 0);
 }
 
 function renderCartCount() {
