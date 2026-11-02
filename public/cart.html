@@ -29,12 +29,19 @@
         <thead><tr><th>Product</th><th>Price</th><th>Qty</th><th>Line total</th><th></th></tr></thead>
         <tbody>${lines.map((l) => {
           const p = byId(l.id);
-          return `<tr data-line="${p.id}"><td>${p.name}</td><td>${money(p.price)}</td><td>${l.qty}</td>
+          return `<tr data-line="${p.id}"><td>${p.name}</td><td>${money(p.price)}</td><td><button class="secondary" onclick="changeQty(${p.id}, -1)">−</button> ${l.qty} <button class="secondary" onclick="changeQty(${p.id}, 1)">+</button></td>
             <td>${money(p.price * l.qty)}</td><td><button class="secondary" onclick="removeLine(${p.id})">Remove</button></td></tr>`;
         }).join("")}</tbody>
       </table>
       <p class="price">Total: <span id="total">${money(cartTotal(lines))}</span></p>
       <a class="button" href="/checkout">Go to checkout</a>`;
+  }
+  function changeQty(id, delta) {
+    const lines = readCart();
+    const line = lines.find((l) => l.id === id);
+    line.qty = Math.max(1, line.qty + delta);
+    writeCart(lines);
+    renderCart();
   }
   function removeLine(id) {
     writeCart(readCart().filter((l) => l.id !== id));
